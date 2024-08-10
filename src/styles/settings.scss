@@ -1,0 +1,37 @@
+$input-border-color: #b3b3b3;
+$font-color-main: #fff;
+
+* {
+  margin: 0px;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  color: #fff;
+}
+
+body {
+  margin: 20px;
+}
+
+.default-input-container {
+  display: flex;
+  align-self: center;
+}
+
+.default-input {
+  font-family: inherit;
+  padding: 10px 15px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.default-input:focus {
+  outline: none;
+  border: 1px solid $input-border-color;
+}
+
+a {
+  text-decoration: none;
+}
