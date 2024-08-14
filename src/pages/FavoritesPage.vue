@@ -3,12 +3,10 @@ import { onMounted, ref } from "vue";
 import CardFilm from "../components/CardFilm.vue";
 import SortFilmsComponent from "../components/SortFilmsComponent.vue";
 
-const filmsFavorites = ref(
-  JSON.parse(localStorage.getItem("favoriteFilms")) || []
-);
-const filmsFavoritesID = ref(
-  JSON.parse(localStorage.getItem("favoriteFilmsID")) || []
-);
+import { fetchFavoriteFilms, fetchFavoriteFilmsID } from "../../api/api.js";
+
+// const filmsFavorites = ref([]);
+const filmsFavoritesID = ref([]);
 
 // prop
 const filmsToSortArray = ref([]);
@@ -16,8 +14,12 @@ const filmsToSortArray = ref([]);
 const responseSortedFilms = ref([]);
 
 onMounted(async () => {
-  await filmsFavorites.value;
-  filmsToSortArray.value = [...filmsFavorites.value];
+  // await filmsFavorites.value;
+  filmsToSortArray.value = await fetchFavoriteFilms();
+  console.log(filmsToSortArray);
+  // filmsToSortArray.value = [...filmsFavorites.value];
+  filmsFavoritesID.value = await fetchFavoriteFilmsID();
+  console.log(filmsFavoritesID);
 });
 </script>
 

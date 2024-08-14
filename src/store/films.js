@@ -1,15 +1,22 @@
 import { defineStore } from "pinia";
-import { fetchData } from "../../api/api.js";
+import {
+  fetchData,
+  fetchFavoriteFilmsID,
+  fetchFavoriteFilms,
+  fetchRatedFilms,
+  fetchRatedFilmsID,
+  fetchRatesAndIdsFilms,
+} from "../../api/api.js";
 
 export const useFilmsStore = defineStore("films", {
   state: () => ({
     films: [],
-    favoriteFilms: JSON.parse(localStorage.getItem("favoriteFilms")) || [],
-    favoriteFilmsID: JSON.parse(localStorage.getItem("favoriteFilmsID")) || [],
-    ratedFilms: JSON.parse(localStorage.getItem("ratedFilms")) || [],
-    ratedFilmsID: JSON.parse(localStorage.getItem("ratedFilmsID")) || [],
-    ratesAndIdsFilms:
-      JSON.parse(localStorage.getItem("ratesAndIdsFilms")) || [],
+    favoriteFilms: [],
+    favoriteFilmsID: [],
+
+    ratedFilms: [],
+    ratedFilmsID: [],
+    ratesAndIdsFilms: [],
     rating: 0,
     ratingLabels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     currentFilm: {},
@@ -22,6 +29,11 @@ export const useFilmsStore = defineStore("films", {
   getters: {
     async getDataToStore() {
       this.films = await fetchData();
+      this.favoriteFilmsID = await fetchFavoriteFilmsID();
+      this.favoriteFilms = await fetchFavoriteFilms();
+      this.ratedFilms = await fetchRatedFilms();
+      this.ratedFilmsID = await fetchRatedFilmsID();
+      this.ratesAndIdsFilms = await fetchRatesAndIdsFilms();
     },
 
     getRatingOfCurrentFilmLoaded() {
@@ -44,14 +56,55 @@ export const useFilmsStore = defineStore("films", {
       }
     },
 
-    addToFavorite() {
+    // addToFavorite() {
+    //   if (!this.favoriteFilmsID.includes(this._id)) {
+    //     this.favoriteFilmsID.unshift(this.currentFilm.externalId._id);
+
+    //     localStorage.setItem(
+    //       "favoriteFilmsID",
+    //       JSON.stringify(this.favoriteFilmsID)
+    //     );
+    //   }
+
+    //   if (!this.favoriteFilms.some((f) => f.externalId._id === this._id)) {
+    //     const filmToAddToFav = this.films.find(
+    //       (f) => f.externalId._id === this._id
+    //     );
+
+    //     if (filmToAddToFav) {
+    //       this.favoriteFilms.unshift(filmToAddToFav);
+    //     }
+
+    //     localStorage.setItem(
+    //       "favoriteFilms",
+    //       JSON.stringify(this.favoriteFilms)
+    //     );
+    //   }
+    // },
+
+    async addToFavorite() {
       if (!this.favoriteFilmsID.includes(this._id)) {
         this.favoriteFilmsID.unshift(this.currentFilm.externalId._id);
 
-        localStorage.setItem(
-          "favoriteFilmsID",
-          JSON.stringify(this.favoriteFilmsID)
-        );
+        try {
+          const response = await fetch(
+            "https://62972ac33b7d16bd.mokky.dev/favoriteFilmsID",
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ favoriteFilmsID: this.favoriteFilmsID }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+        } catch (error) {
+          console.error("Error updating favoriteFilmsID:", error);
+        }
       }
 
       if (!this.favoriteFilms.some((f) => f.externalId._id === this._id)) {
@@ -63,10 +116,25 @@ export const useFilmsStore = defineStore("films", {
           this.favoriteFilms.unshift(filmToAddToFav);
         }
 
-        localStorage.setItem(
-          "favoriteFilms",
-          JSON.stringify(this.favoriteFilms)
-        );
+        try {
+          const response = await fetch(
+            "https://62972ac33b7d16bd.mokky.dev/favoriteFilms",
+            {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ favoriteFilms: this.favoriteFilms }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+        } catch (error) {
+          console.error("Error updating favoriteFilms:", error);
+        }
       }
     },
 
