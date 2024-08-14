@@ -56,32 +56,6 @@ export const useFilmsStore = defineStore("films", {
       }
     },
 
-    // addToFavorite() {
-    //   if (!this.favoriteFilmsID.includes(this._id)) {
-    //     this.favoriteFilmsID.unshift(this.currentFilm.externalId._id);
-
-    //     localStorage.setItem(
-    //       "favoriteFilmsID",
-    //       JSON.stringify(this.favoriteFilmsID)
-    //     );
-    //   }
-
-    //   if (!this.favoriteFilms.some((f) => f.externalId._id === this._id)) {
-    //     const filmToAddToFav = this.films.find(
-    //       (f) => f.externalId._id === this._id
-    //     );
-
-    //     if (filmToAddToFav) {
-    //       this.favoriteFilms.unshift(filmToAddToFav);
-    //     }
-
-    //     localStorage.setItem(
-    //       "favoriteFilms",
-    //       JSON.stringify(this.favoriteFilms)
-    //     );
-    //   }
-    // },
-
     async addToFavorite() {
       if (!this.favoriteFilmsID.includes(this._id)) {
         this.favoriteFilmsID.unshift(this.currentFilm.externalId._id);
@@ -95,7 +69,7 @@ export const useFilmsStore = defineStore("films", {
                 Accept: "application/json",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ favoriteFilmsID: this.favoriteFilmsID }),
+              body: JSON.stringify({ favoriteFilmID: this._id }),
             }
           );
 
@@ -125,7 +99,7 @@ export const useFilmsStore = defineStore("films", {
                 Accept: "application/json",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ favoriteFilms: this.favoriteFilms }),
+              body: JSON.stringify({ favoriteFilm: filmToAddToFav }),
             }
           );
 

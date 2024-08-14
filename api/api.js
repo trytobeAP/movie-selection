@@ -16,16 +16,12 @@ export async function fetchFavoriteFilmsID() {
     const responseFavoriteFilmsID = await fetch(
       "https://62972ac33b7d16bd.mokky.dev/favoriteFilmsID"
     );
-    const { favoriteFilmsID: dataFavoriteFilmsID } =
-      await responseFavoriteFilmsID.json();
-    console.log(`dataFavoriteFilmsID is:`); //
-    console.log(dataFavoriteFilmsID); //
-    dataFavoriteFilmsID.map((element) => {
-      const value = element[0];
-      console.log(`value - ${value}`);
-      return value;
+    const favoriteFilmsID = await responseFavoriteFilmsID.json();
+
+    const dataFavoriteFilmsID = favoriteFilmsID.map((element) => {
+      return element["favoriteFilmID"];
     });
-    // console.log(`dataFavoriteFilmsID after mapping - ${dataFavoriteFilmsID}`);
+
     if (dataFavoriteFilmsID) {
       return dataFavoriteFilmsID;
     } else {
@@ -38,12 +34,19 @@ export async function fetchFavoriteFilmsID() {
 
 export async function fetchFavoriteFilms() {
   try {
-    const favoriteFilms = await fetch(
+    const responseFavoriteFilms = await fetch(
       "https://62972ac33b7d16bd.mokky.dev/favoriteFilms"
     );
-    const dataFavoriteFilms = await favoriteFilms.json();
-    console.log(dataFavoriteFilms[0]); //
-    return dataFavoriteFilms[0];
+    const favoriteFilms = await responseFavoriteFilms.json();
+    const dataFavoriteFilms = favoriteFilms.map((element) => {
+      console.log(`element["favoriteFilm"] - ${element["favoriteFilm"]}`);
+      return element["favoriteFilm"];
+    });
+
+    console.log("dataFavoriteFilms"); //
+    console.log(dataFavoriteFilms); //
+
+    return dataFavoriteFilms;
   } catch (error) {
     console.error("Error fetching fectchFavoriteFilms: ", error);
   }
