@@ -18,14 +18,9 @@ onMounted(async () => {
   await filmsStore.getDataToStore;
 
   filmsFavoritesID.value = filmsStore.favoriteFilmsID;
-  console.log(`filmsFavoritesID.value - - - ${filmsFavoritesID.value}`);
 
   filmsToSortArray.value = filmsStore.favoriteFilms;
   responseSortedFilms.value = [...filmsToSortArray.value]; //
-
-  filmsToSortArray.value[0]
-    ? console.log(`CHECKING filmsToSortArray ${filmsToSortArray.value[0].name}`)
-    : null;
 });
 </script>
 

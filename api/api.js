@@ -1,8 +1,7 @@
+const url = "https://62972ac33b7d16bd.mokky.dev";
 export async function fetchData() {
   try {
-    const responseFilms = await fetch(
-      "https://62972ac33b7d16bd.mokky.dev/films"
-    );
+    const responseFilms = await fetch(`${url}/films`);
     const data = await responseFilms.json();
 
     return data[0].docs;
@@ -13,9 +12,7 @@ export async function fetchData() {
 
 export async function fetchFavoriteFilmsID() {
   try {
-    const responseFavoriteFilmsID = await fetch(
-      "https://62972ac33b7d16bd.mokky.dev/favoriteFilmsID"
-    );
+    const responseFavoriteFilmsID = await fetch(`${url}/favoriteFilmsID`);
     const favoriteFilmsID = await responseFavoriteFilmsID.json();
 
     const dataFavoriteFilmsID = favoriteFilmsID.map((element) => {
@@ -34,12 +31,9 @@ export async function fetchFavoriteFilmsID() {
 
 export async function fetchFavoriteFilms() {
   try {
-    const responseFavoriteFilms = await fetch(
-      "https://62972ac33b7d16bd.mokky.dev/favoriteFilms"
-    );
+    const responseFavoriteFilms = await fetch(`${url}/favoriteFilms`);
     const favoriteFilms = await responseFavoriteFilms.json();
     const dataFavoriteFilms = favoriteFilms.map((element) => {
-      console.log(`element["favoriteFilm"] - ${element["favoriteFilm"]}`);
       return element["favoriteFilm"];
     });
 
@@ -52,38 +46,160 @@ export async function fetchFavoriteFilms() {
   }
 }
 
-export async function fetchRatedFilms() {
+export async function getApi_Id_ByFavoriteFilmID(favoriteFilmID) {
   try {
-    const ratedFilms = await fetch(
-      "https://62972ac33b7d16bd.mokky.dev/ratedFilms"
-    );
-    const dataRatedFilms = await ratedFilms.json();
-    return dataRatedFilms[0];
+    const response = await fetch(`${url}/favoriteFilmsID`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    const film = data.find((item) => item.favoriteFilmID === favoriteFilmID);
+
+    if (film) {
+      return film.id;
+    } else {
+      throw new Error("Film not found");
+    }
   } catch (error) {
-    console.error("Error fetching fectchFavoriteFilms: ", error);
+    console.error("Error fetching film ID:", error);
+  }
+}
+
+export async function getApi_FilmId_ByFavoriteFilmID(favoriteFilmID) {
+  try {
+    const response = await fetch(`${url}/favoriteFilms`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    const film = data.find(
+      (item) => item.favoriteFilm.externalId._id === favoriteFilmID
+    );
+
+    if (film) {
+      return film.id;
+    } else {
+      throw new Error("Film not found");
+    }
+  } catch (error) {
+    console.error("Error fetching film ID:", error);
   }
 }
 
 export async function fetchRatedFilmsID() {
   try {
-    const ratedFilmsID = await fetch(
-      "https://62972ac33b7d16bd.mokky.dev/ratedFilmsID"
-    );
-    const dataRatedFilmsID = await ratedFilmsID.json();
+    const responseRatedFilmsID = await fetch(`${url}/ratedFilmsID`);
+    const ratedFilmsID = await responseRatedFilmsID.json();
+
+    const dataRatedFilmsID = ratedFilmsID.map((element) => {
+      console.log(`element["ratedFilmID"] - ${element["ratedFilmID"]}`);
+      return element["ratedFilmID"];
+    });
+
     return dataRatedFilmsID;
   } catch (error) {
     console.error("Error fetching fectchFavoriteFilms: ", error);
   }
 }
+export async function fetchRatedFilms() {
+  try {
+    const responseRatedFilms = await fetch(`${url}/ratedFilms`);
+    const ratedFilms = await responseRatedFilms.json();
 
+    const dataRatedFilms = ratedFilms.map((element) => {
+      console.log(`element["ratedFilm"] - ${element["ratedFilm"]}`);
+      return element["ratedFilm"];
+    });
+
+    return dataRatedFilms;
+  } catch (error) {
+    console.error("Error fetching fectchFavoriteFilms: ", error);
+  }
+}
+
+// ???????
 export async function fetchRatesAndIdsFilms() {
   try {
-    const ratesAndIdsFilms = await fetch(
-      "https://62972ac33b7d16bd.mokky.dev/ratedFilmsID"
+    const responseRatesAndIdsFilms = await fetch(`${url}/ratesAndIdsFilms`);
+    const ratesAndIdsFilms = await responseRatesAndIdsFilms.json();
+
+    console.log(
+      `ratesAndIdsFilms[0] in api ===================== ${ratesAndIdsFilms[0]}`
     );
-    const dataRatesAndIdsFilms = await ratesAndIdsFilms.json();
+
+    const dataRatesAndIdsFilms = ratesAndIdsFilms.map((element) => {
+      console.log(`element - ${element}`);
+      const elemCopy = element;
+      console.log(`elemCopy - ${elemCopy}`);
+      return element;
+    });
+
     return dataRatesAndIdsFilms;
   } catch (error) {
     console.error("Error fetching fectchFavoriteFilms: ", error);
+  }
+}
+
+export async function getApi_Id_ByRatedFilmID(ratedFilmID) {
+  try {
+    const response = await fetch(`${url}/ratedFilmsID`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    // ratedFilmID: "6376b9837ad98299ff922212"
+    const data = await response.json();
+    const film = data.find((item) => item.ratedFilmID === ratedFilmID);
+
+    if (film) {
+      return film.id;
+    } else {
+      throw new Error("Film not found");
+    }
+  } catch (error) {
+    console.error("Error fetching film ID:", error);
+  }
+}
+
+export async function getApi_FilmId_ByRatedFilmID(ratedFilmID) {
+  try {
+    const response = await fetch(`${url}/ratedFilms`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    const film = data.find(
+      (item) => item.ratedFilm.externalId._id === ratedFilmID
+    );
+
+    if (film) {
+      return film.id;
+    } else {
+      throw new Error("Film not found");
+    }
+  } catch (error) {
+    console.error("Error fetching film ID:", error);
+  }
+}
+
+export async function getApi_RatesAndIds_ByRatedFilmID(ratedFilmID) {
+  try {
+    const response = await fetch(`${url}/ratesAndIdsFilms`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+    const film = data.find((item) => item[0] === ratedFilmID);
+
+    if (film) {
+      return film.id;
+    } else {
+      throw new Error("Film not found");
+    }
+  } catch (error) {
+    console.error("Error fetching film ID:", error);
   }
 }

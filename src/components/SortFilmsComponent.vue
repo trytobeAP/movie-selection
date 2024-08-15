@@ -1,6 +1,6 @@
 <script setup>
 import { useFilmsStore } from "../store/films";
-import { ref, watch, onMounted, nextTick } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 
 const filmsStore = useFilmsStore();
@@ -15,6 +15,10 @@ const filmsToSortInComponent = ref([]);
 const emit = defineEmits(["sortedFilmsResult"]);
 
 const sortFilmsBy = ref(["По возрастанию", "По убыванию", "Не выбрано"]);
+
+onMounted(async () => {
+  filmsToSortInComponent.value = props.filmsToSort;
+});
 
 function sortByProperty(property, order) {
   if (order === "По возрастанию") {

@@ -24,7 +24,7 @@ const btnStyles = computed(() => {
 const { rating } = storeToRefs(filmsStore);
 
 onMounted(async () => {
-  // await filmsStore.getDataToStore;
+  await filmsStore.getDataToStore;
 
   isMovieFavorite_btn.value = filmsStore.favoriteFilmsID.includes(props._id);
   isMovieRated_btn.value = filmsStore.ratedFilmsID.includes(props._id);

@@ -19,6 +19,7 @@ const renderSearchedFilms = ref(false);
 onMounted(async () => {
   await filmsStore.getDataToStore;
   filmsToSortArray.value = [...filmsStore.films];
+  responseSortedFilms.value = [...filmsToSortArray.value];
 });
 
 function clearSearchedFilms() {
