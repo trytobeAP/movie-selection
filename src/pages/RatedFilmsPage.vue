@@ -1,9 +1,9 @@
 <script setup>
-import { onMounted, ref, watchEffect } from "vue";
-import { storeToRefs } from "pinia";
+import { ref, onMounted, watchEffect } from "vue";
 import CardFilm from "../components/CardFilm.vue";
 import SortFilmsComponent from "../components/SortFilmsComponent.vue";
 import { useFilmsStore } from "../store/films";
+import { storeToRefs } from "pinia";
 
 const filmsStore = useFilmsStore();
 

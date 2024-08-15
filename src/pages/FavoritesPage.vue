@@ -6,7 +6,6 @@ import { useFilmsStore } from "../store/films";
 
 const filmsStore = useFilmsStore();
 
-// const filmsFavorites = ref([]);
 const filmsFavoritesID = ref([]);
 
 // prop
@@ -20,7 +19,7 @@ onMounted(async () => {
   filmsFavoritesID.value = filmsStore.favoriteFilmsID;
 
   filmsToSortArray.value = filmsStore.favoriteFilms;
-  responseSortedFilms.value = [...filmsToSortArray.value]; //
+  responseSortedFilms.value = [...filmsToSortArray.value];
 });
 </script>
 

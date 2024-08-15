@@ -1,48 +1,42 @@
-const url = "https://62972ac33b7d16bd.mokky.dev";
+const url = "https://e88d35421726e038.mokky.dev";
+
 export async function fetchData() {
   try {
-    const responseFilms = await fetch(`${url}/films`);
-    const data = await responseFilms.json();
+    const response = await fetch(`${url}/films`);
+    const data = await response.json();
 
     return data[0].docs;
   } catch (error) {
-    console.error("Error fetching data: ", error);
+    console.error("Error fetching data:", error);
   }
 }
 
 export async function fetchFavoriteFilmsID() {
   try {
-    const responseFavoriteFilmsID = await fetch(`${url}/favoriteFilmsID`);
-    const favoriteFilmsID = await responseFavoriteFilmsID.json();
+    const response = await fetch(`${url}/favoriteFilmsID`);
+    const favoriteFilmsID = await response.json();
 
-    const dataFavoriteFilmsID = favoriteFilmsID.map((element) => {
-      return element["favoriteFilmID"];
-    });
+    const dataFavoriteFilmsID = favoriteFilmsID.map(
+      (element) => element.favoriteFilmID
+    );
 
-    if (dataFavoriteFilmsID) {
-      return dataFavoriteFilmsID;
-    } else {
-      return [];
-    }
+    return dataFavoriteFilmsID;
   } catch (error) {
-    console.error("Error fetching fectchFavoriteFilmsID: ", error);
+    console.error("Error fetching fetchFavoriteFilmsID: ", error);
   }
 }
 
 export async function fetchFavoriteFilms() {
   try {
-    const responseFavoriteFilms = await fetch(`${url}/favoriteFilms`);
-    const favoriteFilms = await responseFavoriteFilms.json();
-    const dataFavoriteFilms = favoriteFilms.map((element) => {
-      return element["favoriteFilm"];
-    });
-
-    console.log("dataFavoriteFilms"); //
-    console.log(dataFavoriteFilms); //
+    const response = await fetch(`${url}/favoriteFilms`);
+    const favoriteFilms = await response.json();
+    const dataFavoriteFilms = favoriteFilms.map(
+      (element) => element.favoriteFilm
+    );
 
     return dataFavoriteFilms;
   } catch (error) {
-    console.error("Error fetching fectchFavoriteFilms: ", error);
+    console.error("Error fetching fetchFavoriteFilms: ", error);
   }
 }
 
@@ -56,11 +50,11 @@ export async function getApi_Id_ByFavoriteFilmID(favoriteFilmID) {
     const data = await response.json();
     const film = data.find((item) => item.favoriteFilmID === favoriteFilmID);
 
-    if (film) {
-      return film.id;
-    } else {
+    if (!film) {
       throw new Error("Film not found");
     }
+
+    return film.id;
   } catch (error) {
     console.error("Error fetching film ID:", error);
   }
@@ -90,55 +84,37 @@ export async function getApi_FilmId_ByFavoriteFilmID(favoriteFilmID) {
 
 export async function fetchRatedFilmsID() {
   try {
-    const responseRatedFilmsID = await fetch(`${url}/ratedFilmsID`);
-    const ratedFilmsID = await responseRatedFilmsID.json();
+    const response = await fetch(`${url}/ratedFilmsID`);
+    const ratedFilmsID = await response.json();
 
-    const dataRatedFilmsID = ratedFilmsID.map((element) => {
-      console.log(`element["ratedFilmID"] - ${element["ratedFilmID"]}`);
-      return element["ratedFilmID"];
-    });
+    const dataRatedFilmsID = ratedFilmsID.map((element) => element.ratedFilmID);
 
     return dataRatedFilmsID;
   } catch (error) {
-    console.error("Error fetching fectchFavoriteFilms: ", error);
+    console.error("Error fetching rated films ID: ", error);
   }
 }
+
 export async function fetchRatedFilms() {
   try {
     const responseRatedFilms = await fetch(`${url}/ratedFilms`);
     const ratedFilms = await responseRatedFilms.json();
 
-    const dataRatedFilms = ratedFilms.map((element) => {
-      console.log(`element["ratedFilm"] - ${element["ratedFilm"]}`);
-      return element["ratedFilm"];
-    });
+    const dataRatedFilms = ratedFilms.map((element) => element.ratedFilm);
 
     return dataRatedFilms;
   } catch (error) {
-    console.error("Error fetching fectchFavoriteFilms: ", error);
+    console.error("Error fetching rated films: ", error);
   }
 }
 
-// ???????
 export async function fetchRatesAndIdsFilms() {
   try {
-    const responseRatesAndIdsFilms = await fetch(`${url}/ratesAndIdsFilms`);
-    const ratesAndIdsFilms = await responseRatesAndIdsFilms.json();
-
-    console.log(
-      `ratesAndIdsFilms[0] in api ===================== ${ratesAndIdsFilms[0]}`
-    );
-
-    const dataRatesAndIdsFilms = ratesAndIdsFilms.map((element) => {
-      console.log(`element - ${element}`);
-      const elemCopy = element;
-      console.log(`elemCopy - ${elemCopy}`);
-      return element;
-    });
-
-    return dataRatesAndIdsFilms;
+    const response = await fetch(`${url}/ratesAndIdsFilms`);
+    const ratesAndIdsFilms = await response.json();
+    return ratesAndIdsFilms;
   } catch (error) {
-    console.error("Error fetching fectchFavoriteFilms: ", error);
+    console.error("Error fetching rates and IDs films: ", error);
   }
 }
 
@@ -148,15 +124,14 @@ export async function getApi_Id_ByRatedFilmID(ratedFilmID) {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    // ratedFilmID: "6376b9837ad98299ff922212"
     const data = await response.json();
     const film = data.find((item) => item.ratedFilmID === ratedFilmID);
 
-    if (film) {
-      return film.id;
-    } else {
+    if (!film) {
       throw new Error("Film not found");
     }
+
+    return film.id;
   } catch (error) {
     console.error("Error fetching film ID:", error);
   }
@@ -174,17 +149,16 @@ export async function getApi_FilmId_ByRatedFilmID(ratedFilmID) {
       (item) => item.ratedFilm.externalId._id === ratedFilmID
     );
 
-    if (film) {
-      return film.id;
-    } else {
+    if (!film) {
       throw new Error("Film not found");
     }
+    return film.id;
   } catch (error) {
     console.error("Error fetching film ID:", error);
   }
 }
 
-export async function getApi_RatesAndIds_ByRatedFilmID(ratedFilmID) {
+export async function getApi_IDofRatesAndIds_ByRatedFilmID(ratedFilmID) {
   try {
     const response = await fetch(`${url}/ratesAndIdsFilms`);
     if (!response.ok) {
@@ -192,7 +166,7 @@ export async function getApi_RatesAndIds_ByRatedFilmID(ratedFilmID) {
     }
 
     const data = await response.json();
-    const film = data.find((item) => item[0] === ratedFilmID);
+    const film = data.find((item) => Object.keys(item)[0] === ratedFilmID);
 
     if (film) {
       return film.id;

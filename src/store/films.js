@@ -10,28 +10,22 @@ import {
   fetchRatesAndIdsFilms,
   getApi_Id_ByRatedFilmID,
   getApi_FilmId_ByRatedFilmID,
-  getApi_RatesAndIds_ByRatedFilmID,
+  getApi_IDofRatesAndIds_ByRatedFilmID,
 } from "../../api/api.js";
 
 export const useFilmsStore = defineStore("films", {
   state: () => ({
-    url: "https://62972ac33b7d16bd.mokky.dev",
-
+    url: "https://e88d35421726e038.mokky.dev",
     films: [],
     favoriteFilms: [],
     favoriteFilmsID: [],
-
     ratedFilms: [],
     ratedFilmsID: [],
     ratesAndIdsFilms: [],
-
     rating: 0,
     ratingLabels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     currentFilm: {},
     _id: "",
-    sortByYear: "Не выбрано",
-    sortByRating: "Не выбрано",
-    sortByMovieLength: "Не выбрано",
   }),
 
   getters: {
@@ -45,8 +39,6 @@ export const useFilmsStore = defineStore("films", {
     },
 
     getRatingOfCurrentFilmLoaded() {
-      console.log(`this.ratesAndIdsFilms !!! ${this.ratesAndIdsFilms}`);
-
       const foundObj = this.ratesAndIdsFilms.find((obj) => obj[this._id]);
       if (foundObj) {
         this.rating = foundObj[this._id];
@@ -137,7 +129,6 @@ export const useFilmsStore = defineStore("films", {
               },
             }
           );
-
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
@@ -164,7 +155,6 @@ export const useFilmsStore = defineStore("films", {
               },
             }
           );
-
           if (!response.ok) {
             throw new Error("Network response was not ok");
           }
@@ -174,44 +164,20 @@ export const useFilmsStore = defineStore("films", {
       }
     },
 
-    // addToRated() {
-    //   this.ratedFilmsID.unshift(this.currentFilm.externalId._id);
-
-    //   this.ratesAndIdsFilms.unshift({ [this._id]: this.rating });
-
-    //   localStorage.setItem(
-    //     "ratesAndIdsFilms",
-    //     JSON.stringify(this.ratesAndIdsFilms)
-    //   );
-    //   localStorage.setItem("ratedFilmsID", JSON.stringify(this.ratedFilmsID));
-
-    //   if (!this.ratedFilms.some((f) => f.externalId._id === this._id)) {
-    //     const filmToAdd = this.films.find((f) => f.externalId._id === this._id);
-    //     if (filmToAdd) {
-    //       this.ratedFilms.unshift(filmToAdd);
-    //     }
-
-    //     localStorage.setItem("ratedFilms", JSON.stringify(this.ratedFilms));
-    //   }
-    // },
-
     async addToRated() {
       this.ratedFilmsID.unshift(this.currentFilm.externalId._id);
 
       this.ratesAndIdsFilms.unshift({ [this._id]: this.rating });
 
       try {
-        const response = await fetch(
-          "https://62972ac33b7d16bd.mokky.dev/ratedFilmsID",
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ ratedFilmID: this._id }),
-          }
-        );
+        const response = await fetch(`${this.url}/ratedFilmsID`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ratedFilmID: this._id }),
+        });
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -221,17 +187,14 @@ export const useFilmsStore = defineStore("films", {
       }
 
       try {
-        const response = await fetch(
-          "https://62972ac33b7d16bd.mokky.dev/ratesAndIdsFilms",
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ [this._id]: this.rating }),
-          }
-        );
+        const response = await fetch(`${this.url}/ratesAndIdsFilms`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ [this._id]: this.rating }),
+        });
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -247,17 +210,14 @@ export const useFilmsStore = defineStore("films", {
         }
 
         try {
-          const response = await fetch(
-            "https://62972ac33b7d16bd.mokky.dev/ratedFilms",
-            {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ ratedFilm: filmToAdd }),
-            }
-          );
+          const response = await fetch(`${this.url}/ratedFilms`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ratedFilm: filmToAdd }),
+          });
 
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -267,26 +227,6 @@ export const useFilmsStore = defineStore("films", {
         }
       }
     },
-
-    // removeFromRated() {
-    //   if (this.ratedFilmsID.includes(this._id)) {
-    //     this.ratedFilmsID = this.ratedFilmsID.filter((_id) => _id !== this._id);
-    //     localStorage.setItem("ratedFilmsID", JSON.stringify(this.ratedFilmsID));
-
-    //     this.ratedFilms = this.ratedFilms.filter(
-    //       (f) => f.externalId._id !== this._id
-    //     );
-    //     localStorage.setItem("ratedFilms", JSON.stringify(this.ratedFilms));
-
-    //     this.ratesAndIdsFilms = this.ratesAndIdsFilms.filter(
-    //       (obj) => Object.keys(obj) != this._id
-    //     );
-    //     localStorage.setItem(
-    //       "ratesAndIdsFilms",
-    //       JSON.stringify(this.ratesAndIdsFilms)
-    //     );
-    //   }
-    // },
 
     async removeFromRated() {
       if (this.ratedFilmsID.includes(this._id)) {
@@ -298,7 +238,7 @@ export const useFilmsStore = defineStore("films", {
 
         try {
           const response = await fetch(
-            `https://62972ac33b7d16bd.mokky.dev/ratedFilmsID/${idOnApiToDelFromRated_IDs}`,
+            `${this.url}/ratedFilmsID/${idOnApiToDelFromRated_IDs}`,
             {
               method: "DELETE",
               headers: {
@@ -325,7 +265,7 @@ export const useFilmsStore = defineStore("films", {
 
         try {
           const response = await fetch(
-            `https://62972ac33b7d16bd.mokky.dev/ratedFilms/${idOnApiToDelFromRated_Films}`,
+            `${this.url}/ratedFilms/${idOnApiToDelFromRated_Films}`,
             {
               method: "DELETE",
               headers: {
@@ -346,15 +286,8 @@ export const useFilmsStore = defineStore("films", {
           (obj) => Object.keys(obj)[0] !== this._id
         );
 
-        // from previous proj
-        // this.ratesAndIdsFilms = this.ratesAndIdsFilms.filter(
-        //   (obj) => Object.keys(obj) != this._id
-        // );
-
-        console.log(`ratesAndIdsFilms __--__ - ${this.ratesAndIdsFilms}`);
-
         const idOnApiToDelFrom_RatesAndIds =
-          await getApi_RatesAndIds_ByRatedFilmID(this._id);
+          await getApi_IDofRatesAndIds_ByRatedFilmID(this._id);
 
         try {
           const response = await fetch(

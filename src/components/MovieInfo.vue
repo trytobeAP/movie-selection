@@ -1,7 +1,7 @@
 <script setup>
-import { storeToRefs } from "pinia";
 import { ref, defineProps, onMounted, computed } from "vue";
 import { useFilmsStore } from "../store/films";
+import { storeToRefs } from "pinia";
 
 const filmsStore = useFilmsStore();
 

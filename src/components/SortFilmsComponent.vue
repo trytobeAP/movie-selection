@@ -1,10 +1,14 @@
 <script setup>
+import { onMounted, ref, watch } from "vue";
 import { useFilmsStore } from "../store/films";
-import { ref, watch, onMounted } from "vue";
-import { storeToRefs } from "pinia";
 
 const filmsStore = useFilmsStore();
-const { sortByYear, sortByRating, sortByMovieLength } = storeToRefs(filmsStore);
+
+const sortByYear = ref(["Не выбрано"]);
+
+const sortByRating = ref(["Не выбрано"]);
+
+const sortByMovieLength = ref(["Не выбрано"]);
 
 const props = defineProps({
   filmsToSort: Array,

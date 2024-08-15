@@ -1,6 +1,5 @@
 <script setup>
 import { useFilmsStore } from "../store/films";
-
 const filmsStore = useFilmsStore();
 
 const props = defineProps({
