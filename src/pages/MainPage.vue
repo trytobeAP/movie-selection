@@ -1,8 +1,8 @@
 <script setup>
-import { useFilmsStore } from "../store/films";
 import { ref, onMounted, watch } from "vue";
 import CardFilm from "../components/CardFilm.vue";
 import SortFilmsComponent from "../components/SortFilmsComponent.vue";
+import { useFilmsStore } from "../store/films";
 
 const filmsStore = useFilmsStore();
 
@@ -19,6 +19,7 @@ const renderSearchedFilms = ref(false);
 onMounted(async () => {
   await filmsStore.getDataToStore;
   filmsToSortArray.value = [...filmsStore.films];
+  responseSortedFilms.value = [...filmsToSortArray.value];
 });
 
 function clearSearchedFilms() {

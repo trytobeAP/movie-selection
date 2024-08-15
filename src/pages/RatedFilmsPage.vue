@@ -1,13 +1,14 @@
 <script setup>
-import { onMounted, ref, watchEffect } from "vue";
-import { storeToRefs } from "pinia";
+import { ref, onMounted, watchEffect } from "vue";
 import CardFilm from "../components/CardFilm.vue";
 import SortFilmsComponent from "../components/SortFilmsComponent.vue";
+import { useFilmsStore } from "../store/films";
+import { storeToRefs } from "pinia";
 
-const ratedFilmsID = ref(
-  JSON.parse(localStorage.getItem("ratedFilmsID")) || []
-);
-const ratedFilms = ref(JSON.parse(localStorage.getItem("ratedFilms")) || []);
+const filmsStore = useFilmsStore();
+
+const ratedFilmsID = ref([]);
+const ratedFilms = ref([]);
 
 // prop
 const filmsToSortArray = ref([]);
@@ -15,8 +16,13 @@ const filmsToSortArray = ref([]);
 const responseSortedFilms = ref([]);
 
 onMounted(async () => {
-  await ratedFilms.value;
+  await filmsStore.getDataToStore;
+
+  ratedFilms.value = filmsStore.ratedFilms;
+  ratedFilmsID.value = filmsStore.ratedFilmsID;
+
   filmsToSortArray.value = [...ratedFilms.value];
+  responseSortedFilms.value = [...filmsToSortArray.value];
 });
 </script>
 

@@ -2,13 +2,11 @@
 import { onMounted, ref } from "vue";
 import CardFilm from "../components/CardFilm.vue";
 import SortFilmsComponent from "../components/SortFilmsComponent.vue";
+import { useFilmsStore } from "../store/films";
 
-const filmsFavorites = ref(
-  JSON.parse(localStorage.getItem("favoriteFilms")) || []
-);
-const filmsFavoritesID = ref(
-  JSON.parse(localStorage.getItem("favoriteFilmsID")) || []
-);
+const filmsStore = useFilmsStore();
+
+const filmsFavoritesID = ref([]);
 
 // prop
 const filmsToSortArray = ref([]);
@@ -16,8 +14,12 @@ const filmsToSortArray = ref([]);
 const responseSortedFilms = ref([]);
 
 onMounted(async () => {
-  await filmsFavorites.value;
-  filmsToSortArray.value = [...filmsFavorites.value];
+  await filmsStore.getDataToStore;
+
+  filmsFavoritesID.value = filmsStore.favoriteFilmsID;
+
+  filmsToSortArray.value = filmsStore.favoriteFilms;
+  responseSortedFilms.value = [...filmsToSortArray.value];
 });
 </script>
 
